@@ -1,15 +1,25 @@
-from flask import Flask, render_template, url_for, request, flash
+from flask import Flask, render_template, send_file, url_for, request, flash
 import model
 
 
-flask_app = Flask(__name__)
-flask_app.config['SECRET_KEY'] = 'aboba1488'
+app = Flask(__name__)
+app.config['SECRET_KEY'] = 'aboba1488'
 
 
-@flask_app.route('/')
+@app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', class1='active', class2='', class3='', class4='')
+
+
+@app.route('/report', methods=['POST'])
+def report():
+    # print(request.form['operator'])
+    file = model.get_report(int(request.form['operator']))
+    # if file:
+    #     return send_file(file, as_attachment=True)
+    flash('Ошибка формирования отчёта', category='error')
+    return render_template('index.html', class1='active', class2='', class3='', class4='')
 
 
 if __name__ == '__main__':
-    flask_app.run(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0', debug=True)

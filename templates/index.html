@@ -1,25 +1,89 @@
 {% extends 'base.html' %} {% block content %} {{ super() }}
 
-<form action="/search" method="post">
-  <label class="search">PID</label><input class="pid" type="text" name="pid" value="" />
-  <input type="submit" value="Найти" />
-  <input type="hidden" name="searchType" value="pid" />
-</form>
-<br />
-<form action="/search" method="post">
-  <label class="search">Магазин</label><input class="shop" type="text" name="shop" value="" />
-  <input type="submit" value="Найти" />
-  <input type="hidden" name="searchType" value="shop" />
-</form>
-
-<!-- <form action="/pid" method="post">
-  <label class="search">PID</label><input class="pid" type="text" name="pid" value="" />
-  <input type="submit" value="Найти" />
-</form>
-<br />
-<form action="/shop" method="post">
-  <label class="search">Магазин</label><input class="shop" type="text" name="shop" value="" />
-  <input type="submit" value="Найти" />
-</form> -->
+<table class="users">
+  <tr>
+    <th>Оператор</th>
+    <th>Действие</th>
+  </tr>
+  <tr>
+    <td>Все операторы</td>
+    <td>
+      <form
+      action="{{url_for('report')}}"
+      method="POST"
+      enctype="multipart/form-data"
+    >
+    <input type="hidden" name="operator" value="0">
+    <input type="submit" value="Скачать отчёт">
+    </form>
+    </td>
+    </tr>
+    <tr>
+      <td>Оператор 1</td>
+      <td>
+        <form
+        action="{{url_for('report')}}"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+      <input type="hidden" name="operator" value="1">
+      <input type="submit" value="Скачать отчёт">
+      </form>
+      </td>
+      </tr>
+    <tr>
+      <td>Оператор 2</td>
+      <td>
+        <form
+        action="{{url_for('report')}}"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+      <input type="hidden" name="operator" value="2">
+      <input type="submit" value="Скачать отчёт">
+      </form>
+      </td>
+      </tr>
+    <tr>
+      <td>Оператор 3</td>
+      <td>
+        <form
+        action="{{url_for('report')}}"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+      <input type="hidden" name="operator" value="3">
+      <input type="submit" value="Скачать отчёт">
+      </form>
+      </td>
+      </tr>
+    <tr>
+      <td>Оператор 4</td>
+      <td>
+        <form
+        action="{{url_for('report')}}"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+      <input type="hidden" name="operator" value="4">
+      <input type="submit" value="Скачать отчёт">
+      </form>
+      </td>
+      </tr>
+    <tr>
+      <td>Оператор 5</td>
+      <td>
+        <form
+        action="{{url_for('report')}}"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+      <input type="hidden" name="operator" value="5">
+      <input type="submit" value="Скачать отчёт">
+      </form>
+      </td>
+      </tr>
+  </form>
+</table>
 
 {% endblock %}

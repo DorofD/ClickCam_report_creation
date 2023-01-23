@@ -1,6 +1,7 @@
 import sqlite3 as sq
 import openpyxl
 import os
+import shutil
 
 
 def create_db():
@@ -79,28 +80,6 @@ def db_update(file):
         return False
 
 
-def get_contracts_pid(pid):
-    conn = sq.connect('database.db')
-    cursor = conn.cursor()
-    query = f"""SELECT * FROM contracts
-        WHERE pid = '{pid}'"""
-    cursor.execute(query)
-    result = cursor.fetchall()
-    conn.close()
-    return result
-
-
-def get_contracts_shop(shop_name):
-    conn = sq.connect('database.db')
-    cursor = conn.cursor()
-    query = f"""SELECT * FROM contracts
-        WHERE shop_name LIKE '%{shop_name}%'"""
-    cursor.execute(query)
-    result = cursor.fetchall()
-    conn.close()
-    return result
-
-
 def get_contract_id(id):
     conn = sq.connect('database.db')
     cursor = conn.cursor()
@@ -111,5 +90,39 @@ def get_contract_id(id):
     conn.close()
     return result
 
+
+def get_one_report(operator):
+    pass
+
+
+def get_all_reports(operator):
+    pass
+
+
+def get_report(operator):
+    operators = {
+        0: ['operator11', 'operator2', 'operator33', 'operator4', 'operator5'],
+        1: 'operator11',
+        2: 'operator2',
+        3: 'operator33',
+        4: 'operator4',
+        5: 'operator5',
+
+    }
+    if operator == 0:
+        file_path = get_all_reports(operators[operator])
+    else:
+        file_path = get_one_report(operators[operator])
+    print(operators[operator])
+    try:
+        source_path = r'\\operator4\c$\zDistr'
+        dest_path = r'C:\Users\Dorofeev.E.BOOKCENTRE\Desktop\ssPyQt5_report_creation'
+        file_name = '\\sas.txt'
+        shutil.copyfile(source_path + file_name, dest_path + file_name)
+        result = dest_path + '\\result.xlsx'
+        return result
+    except Exception as exc:
+        print(exc)
+        return False
 
 # create_db()
