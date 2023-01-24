@@ -4,39 +4,6 @@ import os
 import shutil
 
 
-def create_db():
-    conn = sq.connect('database.db')
-    cursor = conn.cursor()
-    query = """CREATE TABLE IF NOT EXISTS contracts (
-        id INTEGER NOT NULL UNIQUE, 
-        pid INTEGER NOT NULL,
-        shop_name TEXT NOT NULL,
-        wan_type TEXT NOT NULL,
-        ip TEXT,
-        legal_entity TEXT NOT NULL,
-        isp TEXT NOT NULL,
-        contract TEXT,
-        shop_address TEXT NOT NULL,
-        sd_phone TEXT,
-        sd_email TEXT,
-        PRIMARY KEY ("id" AUTOINCREMENT)
-    )
-    """
-    cursor.execute(query)
-
-    query = """CREATE TABLE IF NOT EXISTS users (
-        id INTEGER UNIQUE, 
-        username TEXT NOT NULL UNIQUE,
-        psw TEXT NOT NULL,
-        user_type TEXT NOT NULL,
-        auth_type TEXT NOT NULL,
-        PRIMARY KEY ("id" AUTOINCREMENT)
-    )
-    """
-    cursor.execute(query)
-    conn.close()
-
-
 def db_update(file):
     try:
         conn = sq.connect('database.db')
@@ -92,6 +59,7 @@ def get_contract_id(id):
 
 
 def get_one_report(operator):
+    db_path = 1
     pass
 
 
@@ -107,7 +75,6 @@ def get_report(operator):
         3: 'operator33',
         4: 'operator4',
         5: 'operator5',
-
     }
     if operator == 0:
         file_path = get_all_reports(operators[operator])
