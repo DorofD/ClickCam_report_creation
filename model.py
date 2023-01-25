@@ -99,6 +99,8 @@ def get_report(operator):
 
 def get_cc_count(pid, cam, date, start_time, end_time):
     try:
+        date = str(date[4:] + date[2:4] + date[0:2])
+
         def get_count_in_file(start_time, end_time):
             count = 0
             with open('exported_log.txt') as file:
