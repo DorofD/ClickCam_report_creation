@@ -17,17 +17,6 @@ def get_count_in_file(start_time, end_time):
     return count
 
 
-def get_number_of_visitors(pid, cam, date, start_time, end_time):
-    pass
-
-# i = 0
-# with open('log.txt', 'r') as file:
-#     for line in file:
-#         if 'Вход' in line:
-#             i += 1
-# print(i)
-
-
 pid = input('Enter PID: ')
 cam = input('Enter cam: ')
 date = input('Enter date (yymmdd): ')
@@ -36,7 +25,7 @@ start_time = datetime.datetime.strptime(
 end_time = datetime.datetime.strptime(
     input('Enter end time (hh:mm:ss): '), '%H:%M:%S')
 final_count = 0
-
+local_path = r'C:\Users\Dorofeev.E.BOOKCENTRE\Desktop\ssPyQt5_report_creation\exported_log.txt'
 
 ftp = FTP()
 ftp.connect('ftp1', 21)
@@ -56,19 +45,16 @@ for file in files:
 print(matching_files)
 
 for file in matching_files:
-    if os.path.exists(r'C:\Users\Dorofeev.E.BOOKCENTRE\Desktop\ssPyQt5_report_creation\exported_log.txt'):
-        os.remove(
-            r'C:\Users\Dorofeev.E.BOOKCENTRE\Desktop\ssPyQt5_report_creation\exported_log.txt')
+    if os.path.exists(local_path):
+        os.remove(local_path)
 
     local_file = open('exported_log.txt', 'wb')
     ftp.retrbinary(f'RETR {file}', local_file.write, 1024)
 
     local_file.close()
     final_count += get_count_in_file(start_time, end_time)
-    os.remove(
-        r'C:\Users\Dorofeev.E.BOOKCENTRE\Desktop\ssPyQt5_report_creation\exported_log.txt')
+    os.remove(local_path)
 
-# sas = ftp.retrbinary(f'RETR /10/cam1/Log_201014_202517.txt', writeFunc)
 ftp.close()
 
 print('Всего посетителей за указанный период:', final_count)
