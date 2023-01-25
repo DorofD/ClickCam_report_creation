@@ -19,3 +19,4 @@ print(source_path + file_name, dest_path + file_name)
 # if os.path.exists(r'C:\Users\Dorofeev.E.BOOKCENTRE\Desktop\ssPyQt5_report_creation\boba.xlsx'):
 #     os.remove(
 #         r'C:\Users\Dorofeev.E.BOOKCENTRE\Desktop\ssPyQt5_report_creation\boba.xlsx')
+local_file = open('exported_log.txt', 'wb')

@@ -18,23 +18,31 @@ import datetime
 #     print(temp)
 
 # парсинг времени в файле
-# with open('big_log.txt') as file:
-#     for line in file:
-#         if 'Вход' in line:
-#             time_in_line = re.findall(r'..:..:..', line)
-#             # print(time_in_line[0])
-#             time_parts = [int(s) for s in time_in_line[0].split(':')]
-#             print(time_parts)
+
+# start_time = input()
+# end_time = input()
+start_time = datetime.datetime.strptime(input(), '%H:%M:%S')
+end_time = datetime.datetime.strptime(input(), '%H:%M:%S')
+
+
+def get_count_in_file(start_time, end_time):
+    count = 0
+    with open('big_log.txt') as file:
+        for line in file:
+            if 'Вход' in line:
+                time_in_line = re.findall(r'..:..:..', line)
+                time_in_line = datetime.datetime.strptime(
+                    time_in_line[0], '%H:%M:%S')
+                if start_time < time_in_line < end_time:
+                    count += 1
+    return count
+
 
 # time_in_line = '21:02:55'
-# time_parts = [int(s) for s in boba.split(':')]
-# print(time_parts)
-start_time = input()
-end_time = input()
-time_in_line = '21:02:55'
 
-start_time = datetime.datetime.strptime(start_time, '%H:%M:%S')
-end_time = datetime.datetime.strptime(end_time, '%H:%M:%S')
-time_in_line = datetime.datetime.strptime(time_in_line, '%H:%M:%S')
 
-print(start_time < time_in_line < end_time)
+# start_time = datetime.datetime.strptime(start_time, '%H:%M:%S')
+# end_time = datetime.datetime.strptime(end_time, '%H:%M:%S')
+# time_in_line = datetime.datetime.strptime(time_in_line, '%H:%M:%S')
+
+print(get_count_in_file(start_time, end_time))
