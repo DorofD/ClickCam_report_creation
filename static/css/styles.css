@@ -1,5 +1,5 @@
 body {
-  font-family: 'Yandex Sans Text Regular', 'Arial';
+  font-family: "Yandex Sans Text Regular", "Arial";
   margin: 0;
   padding: 0;
   height: 100%;
@@ -110,7 +110,7 @@ input.shop {
 }
 
 table {
-  width: 100%;
+  width: 40%;
   background: #4caf50;
   border-spacing: 0 2px;
 }
@@ -165,22 +165,22 @@ form.login {
   border-radius: 10px;
   margin: 0 auto;
 }
-input[type='text'] {
+input[type="text"] {
   border: 2px solid #4caf50;
   border-radius: 4px;
   font-size: medium;
 }
 
-input[type='password'] {
+input[type="password"] {
   border: 2px solid #4caf50;
   border-radius: 4px;
   font-size: medium;
 }
 
-input[type='submit'] {
+input[type="submit"] {
   font-size: medium;
 }
 
-input[type='file'] {
+input[type="file"] {
   font-size: medium;
 }
