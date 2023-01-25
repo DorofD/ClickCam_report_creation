@@ -9,10 +9,6 @@ import re
 # print(i)
 
 
-def writeFunc(s):
-    print("Read: " + s)
-
-
 ftp = FTP()
 ftp.connect('ftp1', 21)
 print(ftp.login('clevercam', 'clevercam'))
@@ -40,3 +36,7 @@ print(matching_files)
 
 # sas = ftp.retrbinary(f'RETR /10/cam1/Log_201014_202517.txt', writeFunc)
 ftp.close()
+
+
+def get_number_of_visitors():
+    pass
