@@ -62,15 +62,6 @@ def get_contract_id(id):
     return result
 
 
-def get_one_report(operator):
-    print(operator)
-    pass
-
-
-def get_all_reports(operator):
-    pass
-
-
 def get_report(operator):
     operators = {
         0: ['operator11', 'operator2', 'operator33', 'operator4', 'operator5'],
@@ -88,27 +79,70 @@ def get_report(operator):
         filepath = rf'C:\Users\Dorofeev.E.BOOKCENTRE\Desktop\ssPyQt5_report_creation\Оператор{operator} {today}.xlsx'
         wb = openpyxl.Workbook()
         wb.save(filepath)
-        source_path = rf'\\operator5\c$\zDistr\!ssPyQt5\main'
+        # подключение листа Excel
+        wb = openpyxl.load_workbook(f'Оператор{operator} {today}.xlsx')
+        sheet = wb.active
+        # загрузка БД
+        source_path = rf'\\{operators[operator]}\c$\zDistr\!ssPyQt5\main'
         dest_path = rf'C:\Users\Dorofeev.E.BOOKCENTRE\Desktop\ssPyQt5_report_creation'
         file_name = '\\database.db'
         shutil.copyfile(source_path + file_name, dest_path + file_name)
 
         conn = sq.connect('database.db')
         cursor = conn.cursor()
-        query = """
+        query = f"""
             SELECT * FROM notes
+            WHERE date = '{today}'
         """
         cursor.execute(query)
         notes = cursor.fetchall()
+        sheet[f'B{1}'].value = 'Дата'
+        sheet[f'A{1}'].value = 'Оператор'
+        sheet[f'C{1}'].value = 'Время МСК'
+        sheet[f'D{1}'].value = 'Время местное'
+        sheet[f'E{1}'].value = 'Магазин'
+        sheet[f'F{1}'].value = 'Проход'
+        sheet[f'G{1}'].value = 'Скриншот'
+        sheet[f'I{1}'].value = 'Оператор'
+        sheet[f'J{1}'].value = 'Время МСК'
+        sheet[f'K{1}'].value = 'Магазин'
+        sheet[f'L{1}'].value = 'Проход'
+        sheet[f'M{1}'].value = 'Статус интервала'
 
-        if operator == 0:
-            file_path = get_all_reports(operators[operator])
+        i = 2
+        for note in notes:
+            sheet[f'A{i}'].value = note[1]
+            sheet[f'B{i}'].value = note[2]
+            sheet[f'C{i}'].value = note[3][0:19]
+            sheet[f'D{i}'].value = note[4][0:19]
+            sheet[f'E{i}'].value = note[5]
+            sheet[f'F{i}'].value = note[6]
+            sheet[f'G{i}'].value = note[7]
+            i += 1
 
-        else:
-            for note in notes:
-                print(note)
-            # file_path = get_one_report(operators[operator])
-        result = '228'
+        query = f"""
+            SELECT * FROM intervals
+        """
+        cursor.execute(query)
+        notes = cursor.fetchall()
+        for note in notes:
+            print(note)
+
+        i = 2
+        for note in notes:
+            sheet[f'I{i}'].value = note[0]
+            sheet[f'J{i}'].value = note[1][0:19]
+            sheet[f'K{i}'].value = note[2]
+            sheet[f'L{i}'].value = note[3]
+            sheet[f'M{i}'].value = note[4]
+
+            i += 1
+
+        wb.save(f'Оператор{operator} {today}.xlsx')
+        conn.close()
+        os.remove(
+            rf'C:\Users\Dorofeev.E.BOOKCENTRE\Desktop\ssPyQt5_report_creation\database.db')
+        result = rf'Оператор{operator} {today}.xlsx'
         return result
     except Exception as exc:
         print(exc)

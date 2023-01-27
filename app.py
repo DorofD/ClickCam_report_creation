@@ -13,10 +13,10 @@ def index():
 
 @app.route('/report', methods=['POST'])
 def report():
-    # print(request.form['operator'])
+    print(request.form['operator'])
     file = model.get_report(int(request.form['operator']))
-    # if file:
-    #     return send_file(file, as_attachment=True)
+    if file:
+        return send_file(file, as_attachment=True)
     flash('Ошибка формирования отчёта', category='error')
     return render_template('index.html', class1='active', class2='')
 
