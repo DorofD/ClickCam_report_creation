@@ -26,10 +26,11 @@ def clever_cam():
     if request.method == 'POST':
         entered_data = [request.form['pid'], request.form['cam'],
                         request.form['date'], request.form['start_time'], request.form['end_time']]
-        result = f"{model.get_cc_count(request.form['pid'], request.form['cam'], request.form['date'], request.form['start_time'], request.form['end_time'])}"
+        result = model.get_cc_count(request.form['pid'], request.form['cam'],
+                                    request.form['date'], request.form['start_time'], request.form['end_time'])
         return render_template('clever_cam.html', class1='', class2='active', entered_data=entered_data,  result=result)
     entered_data = ['', '', '', '', '']
-    result = ''
+    result = ['', '']
     return render_template('clever_cam.html', class1='', class2='active', entered_data=entered_data,  result=result)
 
 

@@ -10,17 +10,13 @@ import os
 # shutil.copyfile(source_path + file_name, dest_path + file_name)
 # print(source_path + file_name, dest_path + file_name)
 
-# # # создание файла excel
-# # filepath = r"C:\Users\Dorofeev.E.BOOKCENTRE\Desktop\ssPyQt5_report_creation\boba.xlsx"
-# # wb = openpyxl.Workbook()
-# # wb.save(filepath)
+# создание файла excel
+boba = 'boba'
+filepath = rf"C:\Users\Dorofeev.E.BOOKCENTRE\Desktop\ssPyQt5_report_creation\{boba}.xlsx"
+wb = openpyxl.Workbook()
+wb.save(filepath)
 
 # # # удаление файла
-# # if os.path.exists(r'C:\Users\Dorofeev.E.BOOKCENTRE\Desktop\ssPyQt5_report_creation\boba.xlsx'):
-# #     os.remove(
-# #         r'C:\Users\Dorofeev.E.BOOKCENTRE\Desktop\ssPyQt5_report_creation\boba.xlsx')
-
-date = '332211'
-
-date = str(date[4:] + date[2:4] + date[0:2])
-print(date)
+# if os.path.exists(r'C:\Users\Dorofeev.E.BOOKCENTRE\Desktop\ssPyQt5_report_creation\boba.xlsx'):
+#     os.remove(
+#         r'C:\Users\Dorofeev.E.BOOKCENTRE\Desktop\ssPyQt5_report_creation\boba.xlsx')
