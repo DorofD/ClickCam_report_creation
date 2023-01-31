@@ -8,6 +8,13 @@ import datetime
 
 
 def get_report(operator):
+    operators_names = {
+        'Оператор 1': 'Пак Алина',
+        'Оператор 2': 'Багдасарова Ирина',
+        'Оператор 3': 'Чинарева Александра',
+        'Оператор 4': 'Клюев Михаил',
+        'Оператор 5': 'Бугакова Татьяна'
+    }
     operators = {
         0: ['operator11', 'operator2', 'operator33', 'operator4', 'operator5'],
         1: 'operator11',
@@ -91,6 +98,7 @@ def get_report(operator):
                 rf'C:\Users\Dorofeev.E.BOOKCENTRE\Desktop\ssPyQt5_report_creation\database.db')
             result = rf'Оператор{operator} {today}.xlsx'
             return result
+
         # отчет на всех операторов
         else:
             today = str(datetime.date.today())
@@ -116,54 +124,55 @@ def get_report(operator):
             sheet[f'L{1}'].value = 'Проход'
             sheet[f'M{1}'].value = 'Статус интервала'
 
-            # загрузка БД
-            source_path = rf'\\{operators[operator]}\c$\zDistr\!ssPyQt5\main'
-            dest_path = rf'C:\Users\Dorofeev.E.BOOKCENTRE\Desktop\ssPyQt5_report_creation'
-            file_name = '\\database.db'
-            shutil.copyfile(source_path + file_name, dest_path + file_name)
-
-            conn = sq.connect('database.db')
-            cursor = conn.cursor()
-            query = f"""
-                SELECT * FROM notes
-                WHERE date = '{today}'
-            """
-            cursor.execute(query)
-            notes = cursor.fetchall()
-
             i = 2
-            for note in notes:
-                sheet[f'A{i}'].value = note[1]
-                sheet[f'B{i}'].value = note[2]
-                sheet[f'C{i}'].value = note[3][0:19]
-                sheet[f'D{i}'].value = note[4][0:19]
-                sheet[f'E{i}'].value = note[5]
-                sheet[f'F{i}'].value = note[6]
-                sheet[f'G{i}'].value = note[7]
-                i += 1
+            for operator in operators[0]:
 
-            query = f"""
-                SELECT * FROM intervals
-            """
-            cursor.execute(query)
-            notes = cursor.fetchall()
-            for note in notes:
-                print(note)
+                # загрузка БД
+                source_path = rf'\\{operator}\c$\zDistr\!ssPyQt5\main'
+                dest_path = rf'C:\Users\Dorofeev.E.BOOKCENTRE\Desktop\ssPyQt5_report_creation'
+                file_name = '\\database.db'
+                shutil.copyfile(source_path + file_name, dest_path + file_name)
 
-            i = 2
-            for note in notes:
-                sheet[f'I{i}'].value = note[0]
-                sheet[f'J{i}'].value = note[1][0:19]
-                sheet[f'K{i}'].value = note[2]
-                sheet[f'L{i}'].value = note[3]
-                sheet[f'M{i}'].value = note[4]
+                conn = sq.connect('database.db')
+                cursor = conn.cursor()
+                query = f"""
+                    SELECT * FROM notes
+                    WHERE date = '{today}'
+                """
+                cursor.execute(query)
+                notes = cursor.fetchall()
+                j = i
+                for note in notes:
+                    sheet[f'A{i}'].value = note[1]
+                    sheet[f'B{i}'].value = note[2]
+                    sheet[f'C{i}'].value = note[3][0:19]
+                    sheet[f'D{i}'].value = note[4][0:19]
+                    sheet[f'E{i}'].value = note[5]
+                    sheet[f'F{i}'].value = note[6]
+                    sheet[f'G{i}'].value = note[7]
+                    i += 1
 
-                i += 1
+                query = f"""
+                    SELECT * FROM intervals
+                """
+                cursor.execute(query)
+                notes = cursor.fetchall()
+                for note in notes:
+                    print(note)
 
+                for note in notes:
+                    sheet[f'I{j}'].value = note[0]
+                    sheet[f'J{j}'].value = note[1][0:19]
+                    sheet[f'K{j}'].value = note[2]
+                    sheet[f'L{j}'].value = note[3]
+                    sheet[f'M{j}'].value = note[4]
+
+                    j += 1
+
+                conn.close()
+                os.remove(
+                    rf'C:\Users\Dorofeev.E.BOOKCENTRE\Desktop\ssPyQt5_report_creation\database.db')
             wb.save(f'Все операторы {today}.xlsx')
-            conn.close()
-            os.remove(
-                rf'C:\Users\Dorofeev.E.BOOKCENTRE\Desktop\ssPyQt5_report_creation\database.db')
             result = rf'Все операторы {today}.xlsx'
             return result
     except Exception as exc:
