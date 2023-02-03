@@ -14,7 +14,9 @@ def index():
 @app.route('/report', methods=['POST'])
 def report():
     print(request.form['operator'])
-    file = model.get_report(int(request.form['operator']))
+    print(request.form['date'])
+    file = model.get_report(
+        int(request.form['operator']), request.form['date'])
     if file:
         return send_file(file, as_attachment=True)
     flash('Ошибка формирования отчёта', category='error')
