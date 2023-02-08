@@ -9,3 +9,7 @@ test1.py
 ukm_update
 log.txt
 addresses.xlsx
+/update
+~$addresses.xlsx
+ping_log.txt
+ping.xlsx
