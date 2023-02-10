@@ -9,11 +9,11 @@ import datetime
 
 def get_report(operator, date):
     operators_names = {
-        'Оператор 1': 'Пак Алина',
-        'Оператор 2': 'Багдасарова Ирина',
-        'Оператор 3': 'Чинарева Александра',
-        'Оператор 4': 'Клюев Михаил',
-        'Оператор 5': 'Бугакова Татьяна'
+        'operator11': 'Пак Алина',
+        'operator2': 'Багдасарова Ирина',
+        'operator33': 'Чинарева Александра',
+        'operator4': 'Клюев Михаил',
+        'operator5': 'Бугакова Татьяна'
     }
     operators = {
         0: ['operator11', 'operator2', 'operator33', 'operator4', 'operator5'],
@@ -24,20 +24,41 @@ def get_report(operator, date):
         5: 'operator5',
     }
     try:
-        # отчет на одного оператора
-        if operator != 0:
-            today = str(datetime.date.today())
-            if os.path.exists(rf'C:\Users\Dorofeev.E.BOOKCENTRE\Desktop\ssPyQt5_report_creation\Оператор{operator} {date}.xlsx'):
-                os.remove(
-                    rf'C:\Users\Dorofeev.E.BOOKCENTRE\Desktop\ssPyQt5_report_creation\Оператор{operator} {date}.xlsx')
-            filepath = rf'C:\Users\Dorofeev.E.BOOKCENTRE\Desktop\ssPyQt5_report_creation\Оператор{operator} {date}.xlsx'
-            wb = openpyxl.Workbook()
-            wb.save(filepath)
-            # подключение листа Excel
-            wb = openpyxl.load_workbook(f'Оператор{operator} {date}.xlsx')
-            sheet = wb.active
+        # отчет на всех операторов
+        if date:
+            date = str(datetime.datetime.strptime(date, '%d-%m-%Y'))
+        else:
+            date = str(datetime.date.today())
+        if os.path.exists(rf'C:\Users\Dorofeev.E.BOOKCENTRE\Desktop\ssPyQt5_report_creation\Все операторы {date}.xlsx'):
+            os.remove(
+                rf'C:\Users\Dorofeev.E.BOOKCENTRE\Desktop\ssPyQt5_report_creation\Все операторы {date}.xlsx')
+        filepath = rf'C:\Users\Dorofeev.E.BOOKCENTRE\Desktop\ssPyQt5_report_creation\Все операторы {date}.xlsx'
+        wb = openpyxl.Workbook()
+        wb.save(filepath)
+        # подключение листа Excel
+        wb = openpyxl.load_workbook(f'Все операторы {date}.xlsx')
+        sheet = wb.active
+        sheet[f'A{1}'].value = 'Оператор'
+        sheet[f'B{1}'].value = 'ФИО'
+        sheet[f'C{1}'].value = 'Дата'
+        sheet[f'D{1}'].value = 'Время МСК'
+        sheet[f'E{1}'].value = 'Время местное'
+        sheet[f'F{1}'].value = 'Магазин'
+        sheet[f'G{1}'].value = 'Проход'
+        sheet[f'H{1}'].value = 'Скриншот'
+        sheet[f'J{1}'].value = 'Оператор'
+        sheet[f'K{1}'].value = 'Дата'
+        sheet[f'L{1}'].value = 'Время МСК'
+        sheet[f'M{1}'].value = 'Время Местное'
+        sheet[f'N{1}'].value = 'Магазин'
+        sheet[f'O{1}'].value = 'Проход'
+        sheet[f'P{1}'].value = 'Статус интервала'
+
+        i = 2
+        for operator in operators[0]:
+
             # загрузка БД
-            source_path = rf'\\{operators[operator]}\c$\zDistr\!ssPyQt5\main'
+            source_path = rf'\\{operator}\c$\zDistr\!ssPyQt5\main'
             dest_path = rf'C:\Users\Dorofeev.E.BOOKCENTRE\Desktop\ssPyQt5_report_creation'
             file_name = '\\database.db'
             shutil.copyfile(source_path + file_name, dest_path + file_name)
@@ -50,28 +71,16 @@ def get_report(operator, date):
             """
             cursor.execute(query)
             notes = cursor.fetchall()
-            sheet[f'B{1}'].value = 'Дата'
-            sheet[f'A{1}'].value = 'Оператор'
-            sheet[f'C{1}'].value = 'Время МСК'
-            sheet[f'D{1}'].value = 'Время местное'
-            sheet[f'E{1}'].value = 'Магазин'
-            sheet[f'F{1}'].value = 'Проход'
-            sheet[f'G{1}'].value = 'Скриншот'
-            sheet[f'I{1}'].value = 'Оператор'
-            sheet[f'J{1}'].value = 'Время МСК'
-            sheet[f'K{1}'].value = 'Магазин'
-            sheet[f'L{1}'].value = 'Проход'
-            sheet[f'M{1}'].value = 'Статус интервала'
-
-            i = 2
+            j = i
             for note in notes:
                 sheet[f'A{i}'].value = note[1]
-                sheet[f'B{i}'].value = note[2]
-                sheet[f'C{i}'].value = note[3][0:19]
-                sheet[f'D{i}'].value = note[4][0:19]
-                sheet[f'E{i}'].value = note[5]
-                sheet[f'F{i}'].value = note[6]
-                sheet[f'G{i}'].value = note[7]
+                sheet[f'B{i}'].value = operators_names[operator]
+                sheet[f'C{i}'].value = note[2]
+                sheet[f'D{i}'].value = note[3][0:19]
+                sheet[f'E{i}'].value = note[4][0:19]
+                sheet[f'F{i}'].value = note[5]
+                sheet[f'G{i}'].value = note[6]
+                sheet[f'H{i}'].value = note[7]
                 i += 1
 
             query = f"""
@@ -83,107 +92,23 @@ def get_report(operator, date):
             for note in notes:
                 print(note)
 
-            i = 2
             for note in notes:
-                sheet[f'I{i}'].value = note[0]
-                sheet[f'J{i}'].value = note[1][0:19]
-                sheet[f'K{i}'].value = note[2]
-                sheet[f'L{i}'].value = note[3]
-                sheet[f'M{i}'].value = note[4]
+                sheet[f'J{j}'].value = note[0]
+                sheet[f'K{j}'].value = note[1]
+                sheet[f'L{j}'].value = note[2][0:19]
+                sheet[f'M{j}'].value = note[3][0:19]
+                sheet[f'N{j}'].value = note[4]
+                sheet[f'O{j}'].value = note[5]
+                sheet[f'P{j}'].value = note[6]
 
-                i += 1
+                j += 1
 
-            wb.save(f'Оператор{operator} {date}.xlsx')
             conn.close()
             os.remove(
                 rf'C:\Users\Dorofeev.E.BOOKCENTRE\Desktop\ssPyQt5_report_creation\database.db')
-            result = rf'Оператор{operator} {date}.xlsx'
-            return result
-
-        # отчет на всех операторов
-        else:
-            if date:
-                date = str(datetime.datetime.strptime(date, '%d-%m-%Y'))
-            else:
-                date = str(datetime.date.today())
-            if os.path.exists(rf'C:\Users\Dorofeev.E.BOOKCENTRE\Desktop\ssPyQt5_report_creation\Все операторы {date}.xlsx'):
-                os.remove(
-                    rf'C:\Users\Dorofeev.E.BOOKCENTRE\Desktop\ssPyQt5_report_creation\Все операторы {date}.xlsx')
-            filepath = rf'C:\Users\Dorofeev.E.BOOKCENTRE\Desktop\ssPyQt5_report_creation\Все операторы {date}.xlsx'
-            wb = openpyxl.Workbook()
-            wb.save(filepath)
-            # подключение листа Excel
-            wb = openpyxl.load_workbook(f'Все операторы {date}.xlsx')
-            sheet = wb.active
-            sheet[f'B{1}'].value = 'Дата'
-            sheet[f'A{1}'].value = 'Оператор'
-            sheet[f'C{1}'].value = 'Время МСК'
-            sheet[f'D{1}'].value = 'Время местное'
-            sheet[f'E{1}'].value = 'Магазин'
-            sheet[f'F{1}'].value = 'Проход'
-            sheet[f'G{1}'].value = 'Скриншот'
-            sheet[f'I{1}'].value = 'Оператор'
-            sheet[f'J{1}'].value = 'Дата'
-            sheet[f'K{1}'].value = 'Время МСК'
-            sheet[f'L{1}'].value = 'Время Местное'
-            sheet[f'M{1}'].value = 'Магазин'
-            sheet[f'N{1}'].value = 'Проход'
-            sheet[f'O{1}'].value = 'Статус интервала'
-
-            i = 2
-            for operator in operators[0]:
-
-                # загрузка БД
-                source_path = rf'\\{operator}\c$\zDistr\!ssPyQt5\main'
-                dest_path = rf'C:\Users\Dorofeev.E.BOOKCENTRE\Desktop\ssPyQt5_report_creation'
-                file_name = '\\database.db'
-                shutil.copyfile(source_path + file_name, dest_path + file_name)
-
-                conn = sq.connect('database.db')
-                cursor = conn.cursor()
-                query = f"""
-                    SELECT * FROM notes
-                    WHERE date = '{date}'
-                """
-                cursor.execute(query)
-                notes = cursor.fetchall()
-                j = i
-                for note in notes:
-                    sheet[f'A{i}'].value = note[1]
-                    sheet[f'B{i}'].value = note[2]
-                    sheet[f'C{i}'].value = note[3][0:19]
-                    sheet[f'D{i}'].value = note[4][0:19]
-                    sheet[f'E{i}'].value = note[5]
-                    sheet[f'F{i}'].value = note[6]
-                    sheet[f'G{i}'].value = note[7]
-                    i += 1
-
-                query = f"""
-                    SELECT * FROM intervals
-                    WHERE date = '{date}'
-                """
-                cursor.execute(query)
-                notes = cursor.fetchall()
-                for note in notes:
-                    print(note)
-
-                for note in notes:
-                    sheet[f'I{j}'].value = note[0]
-                    sheet[f'J{j}'].value = note[1]
-                    sheet[f'K{j}'].value = note[2][0:19]
-                    sheet[f'L{j}'].value = note[3][0:19]
-                    sheet[f'M{j}'].value = note[4]
-                    sheet[f'N{j}'].value = note[5]
-                    sheet[f'O{j}'].value = note[6]
-
-                    j += 1
-
-                conn.close()
-                os.remove(
-                    rf'C:\Users\Dorofeev.E.BOOKCENTRE\Desktop\ssPyQt5_report_creation\database.db')
-            wb.save(f'Все операторы {date}.xlsx')
-            result = rf'Все операторы {date}.xlsx'
-            return result
+        wb.save(f'Все операторы {date}.xlsx')
+        result = rf'Все операторы {date}.xlsx'
+        return result
     except Exception as exc:
         print(exc)
         return False

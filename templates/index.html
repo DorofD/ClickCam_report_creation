@@ -9,18 +9,18 @@
   <tr>
     <td>Все операторы</td>
     <form
-    action="{{url_for('report')}}"
-    method="POST"
-    enctype="multipart/form-data"
+      action="{{url_for('report')}}"
+      method="POST"
+      enctype="multipart/form-data"
     >
-    <td><input type="text" name="date" placeholder="дд:мм:гг"></td>
-    <td>
-    <input type="hidden" name="operator" value="0">
-    <input type="submit" value="Скачать отчёт">
-  </td>
-</form>
-    </tr>
-    <tr>
+      <td><input type="text" name="date" placeholder="дд:мм:гг" /></td>
+      <td>
+        <input type="hidden" name="operator" value="0" />
+        <input type="submit" value="Скачать отчёт" />
+      </td>
+    </form>
+  </tr>
+  <!-- <tr>
       <td>Оператор 1</td>
       <form
       action="{{url_for('report')}}"
@@ -90,7 +90,7 @@
       </form>
       </td>
       </tr>
-  </form>
+  </form> -->
 </table>
 
 {% endblock %}
