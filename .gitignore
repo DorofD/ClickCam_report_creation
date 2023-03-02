@@ -13,3 +13,6 @@ addresses.xlsx
 ~$addresses.xlsx
 ping_log.txt
 ping.xlsx
+log
+ansible_parser_log.txt
+aboba.txt
