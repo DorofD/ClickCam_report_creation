@@ -5,6 +5,16 @@ import shutil
 from ftplib import FTP
 import re
 import datetime
+from dotenv import load_dotenv
+
+
+dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
+if os.path.exists(dotenv_path):
+    load_dotenv(dotenv_path)
+
+
+COUNT_LOCAL_PATH = os.environ['COUNT_LOCAL_PATH']
+PROJECT_LOCAL_PATH = os.environ['PROJECT_LOCAL_PATH']
 
 
 def get_report(operator, date):
@@ -29,10 +39,10 @@ def get_report(operator, date):
             date = str(datetime.datetime.strptime(date, '%d-%m-%Y'))
         else:
             date = str(datetime.date.today())
-        if os.path.exists(rf'C:\Users\Dorofeev.E.BOOKCENTRE\Desktop\ssPyQt5_report_creation\Все операторы {date}.xlsx'):
+        if os.path.exists(rf'{PROJECT_LOCAL_PATH}\Все операторы {date}.xlsx'):
             os.remove(
-                rf'C:\Users\Dorofeev.E.BOOKCENTRE\Desktop\ssPyQt5_report_creation\Все операторы {date}.xlsx')
-        filepath = rf'C:\Users\Dorofeev.E.BOOKCENTRE\Desktop\ssPyQt5_report_creation\Все операторы {date}.xlsx'
+                rf'{PROJECT_LOCAL_PATH}\Все операторы {date}.xlsx')
+        filepath = rf'{PROJECT_LOCAL_PATH}\Все операторы {date}.xlsx'
         wb = openpyxl.Workbook()
         wb.save(filepath)
         # подключение листа Excel
@@ -59,7 +69,7 @@ def get_report(operator, date):
 
             # загрузка БД
             source_path = rf'\\{operator}\c$\zDistr\!ssPyQt5\main'
-            dest_path = rf'C:\Users\Dorofeev.E.BOOKCENTRE\Desktop\ssPyQt5_report_creation'
+            dest_path = rf'{PROJECT_LOCAL_PATH}'
             file_name = '\\database.db'
             shutil.copyfile(source_path + file_name, dest_path + file_name)
 
@@ -105,7 +115,7 @@ def get_report(operator, date):
 
             conn.close()
             os.remove(
-                rf'C:\Users\Dorofeev.E.BOOKCENTRE\Desktop\ssPyQt5_report_creation\database.db')
+                rf'{PROJECT_LOCAL_PATH}\database.db')
         wb.save(f'Все операторы {date}.xlsx')
         result = rf'Все операторы {date}.xlsx'
         return result
@@ -147,7 +157,7 @@ def get_cc_count(pid, cam, date, start_time, end_time):
             end_time, '%H:%M:%S')
         final_entered = 0
         final_out = 0
-        local_path = r'C:\Users\Dorofeev.E.BOOKCENTRE\Desktop\ssPyQt5_report_creation\exported_log.txt'
+        # COUNT_LOCAL_PATH = r'{PROJECT_LOCAL_PATH}\exported_log.txt'
 
         ftp = FTP()
         ftp.connect('ftp1', 21)
@@ -166,8 +176,8 @@ def get_cc_count(pid, cam, date, start_time, end_time):
         print(matching_files)
 
         for file in matching_files:
-            if os.path.exists(local_path):
-                os.remove(local_path)
+            if os.path.exists(COUNT_LOCAL_PATH):
+                os.remove(COUNT_LOCAL_PATH)
 
             local_file = open('exported_log.txt', 'wb')
             ftp.retrbinary(f'RETR {file}', local_file.write, 1024)
@@ -175,7 +185,7 @@ def get_cc_count(pid, cam, date, start_time, end_time):
             local_file.close()
             final_entered += get_count_in_file(start_time, end_time)[0]
             final_out += get_count_in_file(start_time, end_time)[1]
-            os.remove(local_path)
+            os.remove(COUNT_LOCAL_PATH)
         result = [final_entered, final_out]
         ftp.close()
 

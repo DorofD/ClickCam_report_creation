@@ -16,3 +16,4 @@ ping.xlsx
 log
 ansible_parser_log.txt
 aboba.txt
+.env
