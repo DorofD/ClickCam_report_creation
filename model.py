@@ -199,7 +199,7 @@ def get_cc_count(pid, cam, date, start_time, end_time):
 
 
 # pid, cam, date, start_time, end_time
-print(get_cc_count('10', 'cam1', '200123', '10:00:00', '17:00:00'))
+# print(get_cc_count('10', 'cam1', '200123', '10:00:00', '17:00:00'))
 
 # create_db()
 # get_report(5)
