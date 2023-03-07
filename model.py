@@ -6,7 +6,7 @@ from ftplib import FTP
 import re
 import datetime
 from dotenv import load_dotenv
-
+import urllib.request
 
 dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
 if os.path.exists(dotenv_path):
@@ -129,17 +129,17 @@ def get_cc_count(pid, cam, date, start_time, end_time):
         date = str(date[4:] + date[2:4] + date[0:2])
 
         def get_count_in_file(start_time, end_time):
-            with open('exported_log.txt') as file:
+            with open('exported_log.txt', mode='r', encoding='latin-1') as file:
                 entered = 0
                 out = 0
                 for line in file:
-                    if 'Вход' in line:
+                    if 'Âõîä' in line:  # Вход
                         time_in_line = re.findall(r'..:..:..', line)
                         time_in_line = datetime.datetime.strptime(
                             time_in_line[0], '%H:%M:%S')
                         if start_time < time_in_line < end_time:
                             entered += 1
-                    if 'Выход' in line:
+                    if 'Âûõîä' in line:  # Выход
                         time_in_line = re.findall(r'..:..:..', line)
                         time_in_line = datetime.datetime.strptime(
                             time_in_line[0], '%H:%M:%S')
@@ -160,7 +160,7 @@ def get_cc_count(pid, cam, date, start_time, end_time):
         # COUNT_LOCAL_PATH = r'{PROJECT_LOCAL_PATH}\exported_log.txt'
 
         ftp = FTP()
-        ftp.connect('ftp1', 21)
+        ftp.connect('192.168.8.220', 21)
         print(ftp.login('clevercam', 'clevercam'))
         ftp.encoding = 'utf-8'
         ftp.cwd(f'/{pid}/{cam}/')
@@ -179,13 +179,15 @@ def get_cc_count(pid, cam, date, start_time, end_time):
             if os.path.exists(COUNT_LOCAL_PATH):
                 os.remove(COUNT_LOCAL_PATH)
 
-            local_file = open('exported_log.txt', 'wb')
-            ftp.retrbinary(f'RETR {file}', local_file.write, 1024)
-
-            local_file.close()
+            # local_file = open('exported_log.txt', 'wb')
+            urllib.request.urlretrieve(
+                f'ftp://clevercam:clevercam@192.168.8.220/{pid}/{cam}/{file}', 'exported_log.txt')
+            # f'ftp://clevercam:clevercam@192.168.8.220/10/cam1/Log_230305_083748.txt', 'exported_log.txt')
+            # ftp.retrbinary(f'{file}', local_file.write, 1024)
+            # local_file.close()
             final_entered += get_count_in_file(start_time, end_time)[0]
             final_out += get_count_in_file(start_time, end_time)[1]
-            os.remove(COUNT_LOCAL_PATH)
+            # os.remove(COUNT_LOCAL_PATH)
         result = [final_entered, final_out]
         ftp.close()
 
@@ -195,6 +197,9 @@ def get_cc_count(pid, cam, date, start_time, end_time):
         print(exc)
         return False
 
+
+# pid, cam, date, start_time, end_time
+print(get_cc_count('10', 'cam1', '200123', '10:00:00', '17:00:00'))
 
 # create_db()
 # get_report(5)
