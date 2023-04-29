@@ -3,7 +3,7 @@ import model
 
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'aboba1488'
+app.config['SECRET_KEY'] = 'falsdfhalksdjf23'
 
 
 @app.route('/')

@@ -21,7 +21,7 @@ for i in range(1, sheet.max_row + 1):
         computer = sheet[f'A{i}'].value
         dst_path = rf'\\{computer}\c$\Program Files\lillo-win\ukmupman'
         login = '.\администратор'
-        password = 'qwerty-bc'
+        password = 'password'
         mount_command = rf'net use /user:{login} "{dst_path}" {password}'
         mount_result = os.system(mount_command)
         src_path = rf'C:\Users\Dorofeev.E.BOOKCENTRE\Desktop\ssPyQt5_report_creation'
